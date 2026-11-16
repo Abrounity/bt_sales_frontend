@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import type { Product } from '@/data/products';
+import { products as catalogProducts, type Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import ProductModal from '@/components/ProductModal';
 import { useProducts } from '@/hooks/useProducts';
@@ -22,37 +22,6 @@ const heroImages = [
   },
 ];
 
-
-
-
-const spotlightProducts = [
-  {
-    id: "iphone-18-pro",
-    title: "Apple iPhone 18 Pro",
-    description:
-      "Estimated listing for the iPhone 18 Pro. Price and specifications are indicative; please confirm current availability and details before purchase.",
-    price: 149900,
-    image: "/images/spotlight/iphone-18-pro.webp",
-  },
-  {
-    id: "lg-oled-c3",
-    title: 'LG OLED evo C3 55" Smart TV',
-    description:
-      "Experience picture and sound quality refined by decade-long OLED expertise. Enjoy breathtaking clarity, deep blacks, and a lightning-fast gaming response rate.",
-    price: 114990,
-    image: "/images/spotlight/lg-oled-tv.webp",
-  },
-  {
-    id: "airpods-pro",
-    title: "Apple AirPods Pro (2nd Gen)",
-    description:
-      "AirPods Pro feature up to 2x more Active Noise Cancellation, plus Adaptive Audio and Transparency mode to hear the world around you.",
-    price: 24900,
-    image: "/images/spotlight/airpods-pro.webp",
-  },
-];
-
-
 export default function HomePage() {
   const [activeHeroImage, setActiveHeroImage] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -60,7 +29,11 @@ export default function HomePage() {
 
   const spotlightProductIds = ['p13', 'p4', 'p7'];
   const spotlightProducts = spotlightProductIds
-    .map((id) => products.find((product) => product.id === id))
+    .map(
+      (id) =>
+        products.find((product) => product.id === id) ??
+        catalogProducts.find((product) => product.id === id)
+    )
     .filter((product): product is Product => product !== undefined);
   const bestSellers = products.filter((product) => product.isBestSeller);
 
