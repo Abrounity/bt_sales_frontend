@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { getSpecificationIcon } from '@/lib/product-specifications';
 
 interface ProductDetailsProps {
   product: Product;
@@ -11,7 +12,7 @@ interface ProductDetailsProps {
 export default function ProductDetails({ product }: ProductDetailsProps) {
   const { addToCart } = useCart();
   const whatsappMessage = `Hi, I'm interested in ${product.title} listed at ₹${product.price.toLocaleString('en-IN')}.`;
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/919719195200?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="mx-auto w-full max-w-[1280px] px-[18px] py-8 sm:px-6 sm:py-12">
@@ -97,12 +98,26 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
               Key Specifications
             </h2>
             <dl className="grid gap-3 sm:grid-cols-2">
-              {Object.entries(product.specs).map(([label, value]) => (
-                <div key={label} className="rounded-lg bg-[#f8f9fc] p-4">
-                  <dt className="mb-1 text-xs text-[#6b7280]">{label}</dt>
-                  <dd className="text-sm font-semibold text-[#1f2937]">{value}</dd>
-                </div>
-              ))}
+              {Object.entries(product.specs).map(([label, value]) => {
+                const SpecificationIcon = getSpecificationIcon(label);
+                const customIcon = product.specIcons?.[label];
+
+                return (
+                  <div key={label} className="flex items-center gap-3 rounded-lg bg-[#f8f9fc] p-4">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#344054] shadow-sm">
+                      {customIcon ? (
+                        <img src={customIcon} alt="" className="size-5 object-contain" />
+                      ) : (
+                        <SpecificationIcon size={19} aria-hidden="true" />
+                      )}
+                    </span>
+                    <div className="min-w-0">
+                      <dt className="mb-1 text-xs text-[#6b7280]">{label}</dt>
+                      <dd className="break-words text-sm font-semibold text-[#1f2937]">{value}</dd>
+                    </div>
+                  </div>
+                );
+              })}
             </dl>
           </section>
         </div>

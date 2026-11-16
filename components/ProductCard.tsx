@@ -10,7 +10,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onOpenDetails }: ProductCardProps) {
   const whatsappMessage = `Hi, I'm interested in ${product.title} listed at ₹${product.price.toLocaleString('en-IN')}.`;
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/919719195200?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="product-card">

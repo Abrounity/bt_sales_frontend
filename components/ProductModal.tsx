@@ -1,48 +1,20 @@
 'use client';
 
 import { useEffect } from 'react';
-import {
-  Battery,
-  Camera,
-  Cpu,
-  Gauge,
-  HardDrive,
-  Monitor,
-  ShieldCheck,
-  Smartphone,
-  Volume2,
-  Wifi,
-  Zap,
-} from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { Product } from '@/data/products';
+import { getSpecificationIcon } from '@/lib/product-specifications';
 
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
 }
 
-function getSpecIcon(label: string) {
-  const normalizedLabel = label.toLowerCase();
-
-  if (normalizedLabel.includes('processor') || normalizedLabel.includes('chip')) return Cpu;
-  if (normalizedLabel.includes('display') || normalizedLabel.includes('screen')) return Monitor;
-  if (normalizedLabel.includes('battery')) return Battery;
-  if (normalizedLabel.includes('audio') || normalizedLabel.includes('speaker')) return Volume2;
-  if (normalizedLabel.includes('camera')) return Camera;
-  if (normalizedLabel.includes('storage') || normalizedLabel.includes('capacity')) return HardDrive;
-  if (normalizedLabel.includes('connectivity') || normalizedLabel.includes('connection')) return Wifi;
-  if (normalizedLabel.includes('spin') || normalizedLabel.includes('speed') || normalizedLabel.includes('refresh')) return Gauge;
-  if (normalizedLabel.includes('energy') || normalizedLabel.includes('charging')) return Zap;
-  if (normalizedLabel.includes('warranty')) return ShieldCheck;
-
-  return Smartphone;
-}
-
 export default function ProductModal({ product, onClose }: ProductModalProps) {
   const whatsappMessage = product
     ? `Hi, I'm interested in ${product.title} listed at ₹${product.price.toLocaleString('en-IN')}.`
     : '';
-  const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/919719195200?text=${encodeURIComponent(whatsappMessage)}`;
   const savings = product ? product.originalPrice - product.price : 0;
 
   useEffect(() => {
@@ -154,7 +126,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
 
             <dl className="mb-6 grid grid-cols-1 gap-2.5 min-[430px]:grid-cols-2">
               {Object.entries(product.specs).map(([label, value]) => {
-                const SpecIcon = getSpecIcon(label);
+                const SpecIcon = getSpecificationIcon(label);
+                const customIcon = product.specIcons?.[label];
 
                 return (
                   <div
@@ -162,7 +135,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                     className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#e9edf3] bg-[#f8f9fc] p-3 sm:p-3.5"
                   >
                     <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-[#344054] shadow-sm">
-                      <SpecIcon size={19} strokeWidth={2} aria-hidden="true" />
+                      {customIcon ? (
+                        <img src={customIcon} alt="" className="size-5 object-contain" />
+                      ) : (
+                        <SpecIcon size={19} strokeWidth={2} aria-hidden="true" />
+                      )}
                     </span>
                     <div className="min-w-0">
                       <dt className="text-[11px] font-medium uppercase tracking-wide text-[#7b8494]">{label}</dt>

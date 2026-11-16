@@ -13,34 +13,13 @@ export default function Navbar() {
     { label: 'All Products', href: '/shop' },
     { label: 'Categories', href: '/#categories' },
     { label: 'Best Sellers', href: '/#best-sellers' },
-    { label: 'Contact Us', href: '/contact' }
+    { label: 'Contact Us', href: '/contact' },
+  
   ];
 
   return (
     <>
-      {/* Top Banner */}
-      {/* <div className="top-banner">
-        <div className="container top-banner-content">
-          <div className="top-banner-left flex items-center justify-between w-full">
-            <span className="md:block hidden">
-              <i className="fa-solid fa-location-dot" style={{ marginRight: '6px' }}></i>
-              Sector 17A Shop No 02 Harveer Market Kanarsi bus stop Greater Noida (203202 UP)
-            </span>
-             <span className="md:hidden block">
-              <i className="fa-solid fa-location-dot" style={{ marginRight: '6px' }}></i>
-              Greater Noida (203202 UP)
-            </span>
-            <span className="banner-divider">|</span>
-            <span>
-              <i className="fa-solid fa-phone" style={{ marginRight: '6px' }}></i>
-              +91 97191 95200
-            </span>
-          </div>
-          <div className="top-banner-right text-white md:block hidden">
-            <span>Authorized Dealer for Apple, Samsung, OnePlus & LG</span>
-          </div>
-        </div>
-      </div> */}
+      
 
 
       
@@ -110,7 +89,7 @@ export default function Navbar() {
           <div className="header-actions">
             <a
               className="whatsapp-header-link"
-              href="https://wa.me/919876543210"
+              href="https://wa.me/919719195200"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat with BT Sales on WhatsApp"

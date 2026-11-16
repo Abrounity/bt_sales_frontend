@@ -9,9 +9,11 @@ export interface Product {
   originalPrice: number;
   rating: number;
   reviews: number;
+  isBestSeller?: boolean;
   badge?: string;
   image: string;
   specs: Record<string, string>;
+  specIcons?: Record<string, string>;
   description: string;
 }
 

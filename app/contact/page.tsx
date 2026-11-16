@@ -2,11 +2,14 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { submitContactMessage } from '@/lib/products-api';
 
 function ContactContent() {
   const searchParams = useSearchParams();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -41,9 +44,25 @@ function ContactContent() {
     }
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await submitContactMessage({
+        ...formData,
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
+      });
+      setFormSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Unable to send your message.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -169,6 +188,9 @@ function ContactContent() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {submitError && (
+                <p className="contact-submit-error" role="alert">{submitError}</p>
+              )}
               <div>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>Your Name *</label>
                 <input
@@ -187,7 +209,7 @@ function ContactContent() {
                   <input
                     type="tel"
                     required
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 97191 95200"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--color-border)' }}
@@ -228,9 +250,9 @@ function ContactContent() {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{ padding: '14px', marginTop: '8px' }}>
+              <button type="submit" disabled={submitting} className="btn btn-primary" style={{ padding: '14px', marginTop: '8px' }}>
                 <i className="fa-solid fa-paper-plane" style={{ marginRight: '8px' }}></i>
-                Submit Inquiry to Store
+                {submitting ? 'Sending inquiry...' : 'Submit Inquiry to Store'}
               </button>
             </form>
           )}

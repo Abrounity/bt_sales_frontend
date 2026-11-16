@@ -86,3 +86,37 @@ npm install
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) to view your site live.
+
+## 🗄️ MongoDB Product Catalog
+
+The homepage, shop, and product detail pages load their catalog from the backend API.
+Configure `backend/.env` with a valid `MONGODB_URI`, then run the backend from the
+`backend` folder:
+
+```bash
+npm run seed
+npm start
+```
+
+`npm run seed` safely upserts the full catalog from `frontend/data/products.ts` into
+MongoDB and can be run again after catalog changes. Copy `frontend/.env.local.example`
+to `frontend/.env.local` to set `NEXT_PUBLIC_API_URL`; the local default is
+`http://localhost:5000/api`.
+
+Contact Us submissions are validated and saved to MongoDB. Sign in to `/admin`
+and open the **Contact messages** tab to search inquiries, mark them read or new,
+and delete them.
+
+The admin dashboard is available at `/admin`. Configure `ADMIN_EMAIL`,
+`ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET` (at least 32 characters), and
+`FRONTEND_URL` in `backend/.env` before signing in. The admin password is kept in
+an HttpOnly session cookie and is not stored in the browser. Admins can add,
+edit, and delete products, choose which products appear in the homepage Best
+Sellers section, and review customer messages from the dashboard. New products
+are not featured unless the Best Sellers checkbox is enabled.
+
+Product images and specification icons can be uploaded from the admin product
+form. Add
+`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` to
+`backend/.env`; uploads are limited to PNG, JPEG, or WebP files up to 2 MB.
+Keep the Cloudinary API secret on the backend only.

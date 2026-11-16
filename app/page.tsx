@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { products, Product } from '@/data/products';
+import type { Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import ProductModal from '@/components/ProductModal';
+import { useProducts } from '@/hooks/useProducts';
 
 const heroImages = [
   {
@@ -24,15 +25,13 @@ const heroImages = [
 export default function HomePage() {
   const [activeHeroImage, setActiveHeroImage] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { products, loading, error } = useProducts();
 
   const spotlightProductIds = ['p13', 'p4', 'p7'];
-  const bestSellerProductIds = ['p13', 'p15', 'p4', 'p7'];
   const spotlightProducts = spotlightProductIds
     .map((id) => products.find((product) => product.id === id))
     .filter((product): product is Product => product !== undefined);
-  const bestSellers = bestSellerProductIds
-    .map((id) => products.find((product) => product.id === id))
-    .filter((product): product is Product => product !== undefined);
+  const bestSellers = products.filter((product) => product.isBestSeller);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -138,6 +137,8 @@ export default function HomePage() {
           </div>
 
           <div className="spotlight-grid">
+            {loading && <p role="status">Loading featured products...</p>}
+            {error && <p role="alert">Unable to load products: {error}</p>}
             {spotlightProducts.map((product) => (
               <div className="spotlight-card" key={product.id}>
                 <div className="spotlight-badge">{product.badge ?? 'Featured'}</div>
@@ -174,6 +175,8 @@ export default function HomePage() {
         </div>
 
         <div className="product-grid best-sellers-grid">
+          {loading && <p role="status">Loading products...</p>}
+          {error && <p role="alert">Unable to load products: {error}</p>}
           {bestSellers.map((product) => (
             <ProductCard
               key={product.id}

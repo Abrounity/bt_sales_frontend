@@ -1,13 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { products, Product } from '@/data/products';
+import { useRouter, useSearchParams } from 'next/navigation';
+import type { Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import ProductModal from '@/components/ProductModal';
+import { useProducts } from '@/hooks/useProducts';
 
 function ShopContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { products, loading, error } = useProducts();
 
   const [search, setSearch] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -39,7 +42,18 @@ function ShopContent() {
     { id: 'accessories', label: 'Accessories' }
   ];
 
-  const brands = ['Apple', 'Samsung', 'OnePlus', 'Sony', 'Bosch', 'LG', 'Xiaomi', 'Vivo'];
+  const brands = useMemo(
+    () => Array.from(new Set(products.map((product) => product.brand))).sort((a, b) => a.localeCompare(b)),
+    [products]
+  );
+  const catalogPriceCeiling = useMemo(
+    () => Math.max(200000, ...products.map((product) => product.price)),
+    [products]
+  );
+
+  useEffect(() => {
+    setMaxPrice(catalogPriceCeiling);
+  }, [catalogPriceCeiling]);
 
   const toggleCategory = (catId: string) => {
     setSelectedCategories((prev) =>
@@ -57,8 +71,9 @@ function ShopContent() {
     setSearch('');
     setSelectedCategories([]);
     setSelectedBrands([]);
-    setMaxPrice(200000);
+    setMaxPrice(catalogPriceCeiling);
     setSortBy('popularity');
+    router.replace('/shop', { scroll: false });
   };
 
   // Filter & Sort Logic
@@ -98,7 +113,7 @@ function ShopContent() {
         // default: popularity
         return b.reviews - a.reviews;
       });
-  }, [search, selectedCategories, selectedBrands, maxPrice, sortBy]);
+  }, [products, search, selectedCategories, selectedBrands, maxPrice, sortBy]);
 
   return (
     <div className="container page-shell">
@@ -140,6 +155,27 @@ function ShopContent() {
             </div>
           </div>
 
+
+   {/* Price Range Filter */}
+          <div className="filter-group">
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <h4>Max Price</h4>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-brand)' }}>
+                ₹{maxPrice.toLocaleString('en-IN')}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="1000"
+              max={catalogPriceCeiling}
+              step="5000"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              style={{ width: '100%' }}
+            />
+          </div>
+
+
           {/* Category Filter */}
           <div className="filter-group">
             <h4>Categories</h4>
@@ -174,24 +210,7 @@ function ShopContent() {
             </div>
           </div>
 
-          {/* Price Range Filter */}
-          <div className="filter-group">
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <h4>Max Price</h4>
-              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-brand)' }}>
-                ₹{maxPrice.toLocaleString('en-IN')}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="1000"
-              max="200000"
-              step="5000"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              style={{ width: '100%' }}
-            />
-          </div>
+       
         </aside>
 
         {/* Main Products Area */}
@@ -218,7 +237,14 @@ function ShopContent() {
           </div>
 
           {/* Products Grid */}
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <div className="container loading-state" role="status">Loading products...</div>
+          ) : error ? (
+            <div className="empty-catalog" role="alert">
+              <h3>Unable to load products</h3>
+              <p>{error}</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="empty-catalog" style={{ textAlign: 'center', padding: '80px 0' }}>
               <i className="fa-solid fa-box-open" style={{ fontSize: '48px', color: 'var(--text-muted)', marginBottom: '16px' }}></i>
               <h3>No matching products found</h3>
