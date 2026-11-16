@@ -22,6 +22,37 @@ const heroImages = [
   },
 ];
 
+
+
+
+const spotlightProducts = [
+  {
+    id: "iphone-18-pro",
+    title: "Apple iPhone 18 Pro",
+    description:
+      "Estimated listing for the iPhone 18 Pro. Price and specifications are indicative; please confirm current availability and details before purchase.",
+    price: 149900,
+    image: "/images/spotlight/iphone-18-pro.webp",
+  },
+  {
+    id: "lg-oled-c3",
+    title: 'LG OLED evo C3 55" Smart TV',
+    description:
+      "Experience picture and sound quality refined by decade-long OLED expertise. Enjoy breathtaking clarity, deep blacks, and a lightning-fast gaming response rate.",
+    price: 114990,
+    image: "/images/spotlight/lg-oled-tv.webp",
+  },
+  {
+    id: "airpods-pro",
+    title: "Apple AirPods Pro (2nd Gen)",
+    description:
+      "AirPods Pro feature up to 2x more Active Noise Cancellation, plus Adaptive Audio and Transparency mode to hear the world around you.",
+    price: 24900,
+    image: "/images/spotlight/airpods-pro.webp",
+  },
+];
+
+
 export default function HomePage() {
   const [activeHeroImage, setActiveHeroImage] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -127,7 +158,7 @@ export default function HomePage() {
       </section>
 
       {/* Trending Devices Spotlight */}
-      <section className="spotlight-section">
+      {/* <section className="spotlight-section">
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '32px' }}>
             <div className="section-title" style={{ margin: '0 auto' }}>
@@ -163,7 +194,89 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+
+{/* Trending Devices Spotlight */}
+<section className="spotlight-section py-12 md:py-16">
+  <div className="container mx-auto px-4">
+
+    {/* Section Heading */}
+    <div className="text-center mb-10 md:mb-12">
+      <div className="section-title">
+        <h2>Trending Flagship Spotlight</h2>
+        <p>Explore our latest flagship listings</p>
+      </div>
+    </div>
+
+    {/* Product Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-7 !mt-10">
+
+      {spotlightProducts.map((product) => (
+        <div
+          key={product.id}
+          className="relative flex flex-col items-center text-center
+          bg-white border  border-gray-200 rounded-[26px]
+          !p-5 sm:p-7 md:p-6 lg:!p-8
+          shadow-sm hover:shadow-lg
+          transition-all duration-300 hover:-translate-y-1 "
+        >
+
+          {/* Product Image */}
+          <div className="w-full h-[180px] sm:h-[240px] md:h-[220px]
+            lg:h-[200px] flex items-center justify-center mb-5">
+
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-full object-contain"
+            />
+
+          </div>
+
+          {/* Product Details */}
+          <div className="flex flex-col flex-1 w-full">
+
+            <h3 className="text-xl md:text-lg lg:text-[22px]
+              font-bold text-gray-900 mb-4">
+              {product.title}
+            </h3>
+
+            <p className="text-base md:text-[15px] lg:text-[15px]
+              leading-relaxed text-gray-700 mb-2">
+              {product.description}
+            </p>
+
+            {/* Price */}
+            <div className="text-xl font-bold text-red-600 mb-6">
+              ₹{product.price.toLocaleString("en-IN")}
+            </div>
+
+            {/* View Product Button */}
+            <Link
+              href={`/shop?search=${encodeURIComponent(product.title)}`}
+              className="mt-auto w-full border border-gray-200
+              !rounded-xl !py-2 px-4 text-gray-900 font-semibold
+              text-[15px] hover:bg-red-600 hover:!text-white
+              hover:border-red-600 transition-all duration-300 !mt-4 md:!py-2"
+            >
+              View Product
+            </Link>
+
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
 
       {/* Best Sellers Section */}
       <section id="best-sellers" className="container best-sellers-section">
