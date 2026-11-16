@@ -157,44 +157,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trending Devices Spotlight */}
-      {/* <section className="spotlight-section">
-        <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div className="section-title" style={{ margin: '0 auto' }}>
-              <h2>Trending Flagship Spotlight</h2>
-              <p>Explore our latest flagship listings</p>
-            </div>
-          </div>
-
-          <div className="spotlight-grid">
-            {loading && <p role="status">Loading featured products...</p>}
-            {error && <p role="alert">Unable to load products: {error}</p>}
-            {spotlightProducts.map((product) => (
-              <div className="spotlight-card" key={product.id}>
-                <div className="spotlight-badge">{product.badge ?? 'Featured'}</div>
-                <div className="spotlight-visual">
-                  <img src={product.image} alt={product.title} />
-                </div>
-                <div className="spotlight-info">
-                  <h3>{product.title}</h3>
-                  <p>{product.description}</p>
-                  <div className="spotlight-price">
-                    ₹{product.price.toLocaleString('en-IN')}
-                  </div>
-                  <Link
-                    href={`/shop?search=${encodeURIComponent(product.title)}`}
-                    className="btn btn-outline"
-                    style={{ marginTop: '12px', width: '100%', textAlign: 'center' }}
-                  >
-                    View Product
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
+      
 
 
 {/* Trending Devices Spotlight */}
